@@ -1,0 +1,35 @@
+{
+  "activationEvents": ["*"],
+  "bugs": "https://github.com/eahanson/document-sections.novaextension/issues",
+  "categories": ["commands"],
+  "commands": {
+    "editor": [{
+        "command": "document-sections.go-to-section",
+        "shortcut": "ctrl-opt-shift-G",
+        "title": "Go to Section…",
+        "when": "editorHasFocus"
+      },
+      {
+        "command": "document-sections.go-to-previous-section",
+        "shortcut": "ctrl-opt-shift-pageup",
+        "title": "Go to Previous Section",
+        "when": "editorHasFocus"
+      },
+      {
+        "command": "document-sections.go-to-next-section",
+        "shortcut": "ctrl-opt-shift-pagedown",
+        "title": "Go to Next Section",
+        "when": "editorHasFocus"
+      }
+    ]
+  },
+  "description": "Navigate between user-defined sections of a document.",
+  "entitlements": {},
+  "homepage": "https://github.com/eahanson/document-sections.novaextension",
+  "identifier": "eahanson.document-sections",
+  "main": "main.js",
+  "name": "Document Sections",
+  "organization": "Erik Hanson",
+  "repository": "https://github.com/eahanson/document-sections.novaextension",
+  "version": "1.0"
+}
