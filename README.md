@@ -1,6 +1,6 @@
 Sometimes, despite your best efforts, a document gets very large and hard to navigate, and for whatever reason,
-the language server can't help you navigate. This extension provides a "Go to Document Section" command that
-lists sections and lets you jump to one.
+the language server can't help you navigate. This extension provides commands to let you go to a specific section
+of a document, or to go to the previous or next section.
 
 A section is defined by a line of text that starts with a section indicator (currently `// // //`, but will be
 configurable eventually), optionally followed by some text terminated by a newline.
