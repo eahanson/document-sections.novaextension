@@ -1,3 +1,6 @@
+// 456
+// // // Foo
+
 exports.activate = function() {}
 
 exports.deactivate = function() {}
@@ -8,7 +11,7 @@ nova.commands.register("document-sections.go-to-section", (editor) => {
   const doc = editor.document;
   const sections = findSections(doc);
 
-  if (sections.length == 0) {
+  if (!sections || sections.length == 0) {
     return;
   } else {
     const names = sections.map((section) => {
@@ -18,9 +21,9 @@ nova.commands.register("document-sections.go-to-section", (editor) => {
         return `Line ${section.line}`
       }
     });
-    
+
     nova.workspace.showChoicePalette(names, {}, (name, index) =>
-      goToLine(doc, sections[index])
+      goToLine(editor, sections[index])
     );
   }
 });
@@ -40,21 +43,49 @@ function findSections(doc) {
   const text = doc.getTextInRange(new Range(0, doc.length));
 
   if (isNonEmptyString(text)) {
-    return text
-      .split("\n")
-      .reduce((acc, text, index) => {
-        if (text.startsWith("// // //")) {
-          acc.push({ name: sectionName(text), line: index + 1 })
-        }
-        return acc;
-      }, [])
+    const pattern = /\n\s*(\/\/ \/\/ \/\/|# # #)(.*)\n/g
+
+    // const pattern = combineRegexes(["// // //", "# # #"])
+
+    let sections = []
+    while(result = pattern.exec(text)) {
+      let start = pattern.lastIndex - result[0].length;
+      let end = pattern.lastIndex;
+      let name = trim(result[2]);
+      let line = calculateLine(text, start + 1);
+      sections.push({start: start, end: end, name: name, line: line});
+    };
+
+    return sections;
   } else {
     return [];
   }
 }
 
-function goToLine(doc, section) {
-  nova.workspace.openFile(doc.uri, { line: section.line });
+function combineRegexes(regexList) {
+  const combinedRegexPattern = regexList.map(r => `(?:${r})`).join('|');
+  return new RegExp(`\n\s*${combinedRegexPattern}(.*)\n`, 'g');
+}
+
+function trim(text) {
+  if (text) {
+    return text.trim();
+  } else {
+    return null;
+  }
+}
+
+function calculateLine(text, pos) {
+  let fragment = text.substring(0, pos);
+  let line = (fragment.match(/\n/g) || []).length + 1;
+  return line;
+}
+
+function goToLine(editor, section) {
+  if (section) {
+    editor.selectedRange = new Range(section.end - 1, section.end - 1)
+    editor.scrollToCursorPosition()
+  }
 }
 
 function isNonEmptyString(s) {
