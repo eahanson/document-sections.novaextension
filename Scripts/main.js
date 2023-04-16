@@ -1,5 +1,8 @@
-// 456
-// // // Foo
+// Main file. This comment shouldn't be counted as a section.
+
+const { buildRegex, calculateLine, isNonEmptyString, trim } = require("./document_sections")
+
+// // // Unused Nova things
 
 exports.activate = function() {}
 
@@ -8,23 +11,18 @@ exports.deactivate = function() {}
 // // // Commands
 
 nova.commands.register("document-sections.go-to-section", (editor) => {
-  const doc = editor.document;
-  const sections = findSections(doc);
+  const sections = findSections(editor.document)
 
   if (!sections || sections.length == 0) {
-    return;
+    return
   } else {
-    const names = sections.map((section) => {
-      if (section.name) {
-        return `${section.name} (line ${section.line})`
-      } else {
-        return `Line ${section.line}`
-      }
-    });
+    const names = sections.map((section) =>
+      section.name ? `${section.name} (line ${section.line})` : `Line ${section.line}`
+    )
 
     nova.workspace.showChoicePalette(names, {}, (name, index) =>
       goToLine(editor, sections[index])
-    );
+    )
   }
 });
 
@@ -40,12 +38,10 @@ nova.commands.register("document-sections.go-to-next-section", (editor) => {
 // // //
 
 function findSections(doc) {
-  const text = doc.getTextInRange(new Range(0, doc.length));
+  const text = doc.getTextInRange(new Range(0, doc.length))
 
   if (isNonEmptyString(text)) {
-    const pattern = /\n\s*(\/\/ \/\/ \/\/|# # #)(.*)\n/g
-
-    // const pattern = combineRegexes(["// // //", "# # #"])
+    const pattern = buildRegex()
 
     let sections = []
     while(result = pattern.exec(text)) {
@@ -62,25 +58,6 @@ function findSections(doc) {
   }
 }
 
-function combineRegexes(regexList) {
-  const combinedRegexPattern = regexList.map(r => `(?:${r})`).join('|');
-  return new RegExp(`\n\s*${combinedRegexPattern}(.*)\n`, 'g');
-}
-
-function trim(text) {
-  if (text) {
-    return text.trim();
-  } else {
-    return null;
-  }
-}
-
-function calculateLine(text, pos) {
-  let fragment = text.substring(0, pos);
-  let line = (fragment.match(/\n/g) || []).length + 1;
-  return line;
-}
-
 function goToLine(editor, section) {
   if (section) {
     editor.selectedRange = new Range(section.end - 1, section.end - 1)
@@ -88,15 +65,3 @@ function goToLine(editor, section) {
   }
 }
 
-function isNonEmptyString(s) {
-  return s && typeof s == "string" && !/^\s*$/.test(s);
-}
-
-function sectionName(s) {
-  const name = s.replace("// // //", "").trim();
-  if (name.length > 0) {
-    return name;
-  } else {
-    return null;
-  }
-}

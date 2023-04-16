@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Runs all tests in the "Scripts" directory in "watch" mode.
+# Assumes Jest is installed globally (`npm install jest --global`).
+
+set +x
+set -euo pipefail
+trap "exit" INT
+set -x
+
+jest --rootDir ./Scripts --watch
