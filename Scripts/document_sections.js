@@ -1,8 +1,4 @@
-function calculateLine(text, pos) {
-  let fragment = text.substring(0, pos)
-  let line = (fragment.match(/\n/g) || []).length + 1
-  return line
-}
+// @related [test](Scripts/document_sections.test.js)
 
 function buildRegex(maybePatterns) {
   const defaultPatterns = ["// // //", "# # #"]
@@ -10,6 +6,20 @@ function buildRegex(maybePatterns) {
   patterns = patterns.length > 0 ? patterns : defaultPatterns
 
   return new RegExp(`\\n\\s*(${patterns.join('|')})(.*)\\n`, 'g')
+}
+
+function calculateLine(text, pos) {
+  let fragment = text.substring(0, pos)
+  let line = (fragment.match(/\n/g) || []).length + 1
+  return line
+}
+
+function findNextValue(sortedArray, target) {
+  return sortedArray.find(value => value > target) || target
+}
+
+function findPreviousValue(sortedArray, target) {
+  return sortedArray.slice().reverse().find(value => value < target) || 1
 }
 
 function isNonEmptyString(s) {
@@ -23,6 +33,8 @@ function trim(s) {
 module.exports = {
   buildRegex,
   calculateLine,
+  findNextValue,
+  findPreviousValue,
   isNonEmptyString,
   trim
 }

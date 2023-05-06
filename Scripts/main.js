@@ -1,6 +1,13 @@
 // Main file. This comment shouldn't be counted as a section.
 
-const { buildRegex, calculateLine, isNonEmptyString, trim } = require("./document_sections")
+const {
+  buildRegex,
+  calculateLine,
+  findNextValue,
+  findPreviousValue,
+  isNonEmptyString,
+  trim
+} = require("./document_sections")
 
 // // // Unused Nova things
 
@@ -21,35 +28,44 @@ nova.commands.register("document-sections.go-to-section", (editor) => {
     )
 
     nova.workspace.showChoicePalette(names, {}, (name, index) =>
-      goToLine(editor, sections[index])
+      goToSection(editor, sections[index])
     )
   }
 })
 
 nova.commands.register("document-sections.go-to-previous-section", (editor) => {
+  const newPosition = findPreviousValue(findSectionEndPositions(editor.document), editor.selectedRange.start)
+  goToPosition(editor, newPosition - 1)
 })
 
 nova.commands.register("document-sections.go-to-next-section", (editor) => {
-  // const doc = editor.document
-  // const sections = findSections(doc)
-  // console.log("selectedRange", editor.getLineRangeForRange(editor.selectedRange))
+  const newPosition = findNextValue(findSectionEndPositions(editor.document), editor.selectedRange.start)
+  goToPosition(editor, newPosition - 1)
 })
 
 // // //
 
-function findSections(doc) {
-  const text = doc.getTextInRange(new Range(0, doc.length))
+function currentLine(editor) {
+  return calculateLine(documentText(editor.document), editor.selectedRange.start)
+}
+
+function documentText(document) {
+  return document.getTextInRange(new Range(0, document.length))
+}
+
+function findSections(document) {
+  const text = documentText(document)
 
   if (isNonEmptyString(text)) {
     const pattern = buildRegex()
 
     let sections = []
-    while(result = pattern.exec(text)) {
+    while (result = pattern.exec(text)) {
       let start = pattern.lastIndex - result[0].length
       let end = pattern.lastIndex
       let name = trim(result[2])
       let line = calculateLine(text, start + 1) + 1
-      sections.push({start: start, end: end, name: name, line: line})
+      sections.push({ start: start, end: end, name: name, line: line })
     }
 
     return sections
@@ -58,10 +74,17 @@ function findSections(doc) {
   }
 }
 
-function goToLine(editor, section) {
-  if (section) {
-    editor.selectedRange = new Range(section.end - 1, section.end - 1)
-    editor.scrollToCursorPosition()
-  }
+function findSectionEndPositions(document) {
+  return findSections(document).map(section => section.end)
 }
 
+function goToPosition(editor, pos) {
+  editor.selectedRange = new Range(pos, pos)
+  editor.scrollToCursorPosition()
+}
+
+function goToSection(editor, section) {
+  if (section) {
+    goToPosition(editor, section.end - 1)
+  }
+}

@@ -1,4 +1,29 @@
-const { buildRegex, calculateLine, isNonEmptyString, trim } = require("./document_sections");
+const {
+  buildRegex,
+  calculateLine,
+  findNextValue,
+  findPreviousValue,
+  isNonEmptyString,
+  trim
+} = require("./document_sections");
+
+describe("buildRegex", () => {
+  test("builds a regex from one pattern", () => {
+    expect(buildRegex(["// // //"])).toEqual(/\n\s*(\/\/ \/\/ \/\/)(.*)\n/g)
+  })
+
+  test("builds a regex from multiple patterns", () => {
+    expect(buildRegex(["// // //", "# # #"])).toEqual(/\n\s*(\/\/ \/\/ \/\/|# # #)(.*)\n/g)
+  })
+
+  test("uses a default pattern if none is given", () => {
+    const defaultPattern = /\n\s*(\/\/ \/\/ \/\/|# # #)(.*)\n/g
+
+    expect(buildRegex()).toEqual(defaultPattern)
+    expect(buildRegex(null)).toEqual(defaultPattern)
+    expect(buildRegex([])).toEqual(defaultPattern)
+  })
+})
 
 describe("calculateLine", () => {
   test("returns the 1-based line number of the given character position", () => {
@@ -18,21 +43,29 @@ describe("calculateLine", () => {
   })
 })
 
-describe("buildRegex", () => {
-  test("builds a regex from one pattern", () => {
-    expect(buildRegex(["// // //"])).toEqual(/\n\s*(\/\/ \/\/ \/\/)(.*)\n/g)
+describe("findNextValue", () => {
+  test("finds the value in the sorted array that is greater than the given value", () => {
+    expect(findNextValue([10, 20, 30], 15)).toEqual(20)
+    expect(findNextValue([10, 20, 30], 10)).toEqual(20)
   })
 
-  test("builds a regex from multiple patterns", () => {
-    expect(buildRegex(["// // //", "# # #"])).toEqual(/\n\s*(\/\/ \/\/ \/\/|# # #)(.*)\n/g)
+  test("returns the given value if there is no greater number", () => {
+    expect(findNextValue([10, 20, 30], 35)).toEqual(35)
+    expect(findNextValue([10, 20, 30], 30)).toEqual(30)
+    expect(findNextValue([], 10)).toEqual(10)
+  })
+})
+
+describe("findPreviousValue", () => {
+  test("finds the value in the sorted array that is less than the given value", () => {
+    expect(findPreviousValue([10, 20, 30], 25)).toEqual(20)
+    expect(findPreviousValue([10, 20, 30], 30)).toEqual(20)
   })
 
-  test("uses a default pattern if none is given", () => {
-    const defaultPattern = /\n\s*(\/\/ \/\/ \/\/|# # #)(.*)\n/g
-
-    expect(buildRegex()).toEqual(defaultPattern)
-    expect(buildRegex(null)).toEqual(defaultPattern)
-    expect(buildRegex([])).toEqual(defaultPattern)
+  test("returns 1 if there is no smaller number", () => {
+    expect(findPreviousValue([10, 20, 30], 5)).toEqual(1)
+    expect(findPreviousValue([10, 20, 30], 10)).toEqual(1)
+    expect(findPreviousValue([], 10)).toEqual(1)
   })
 })
 
