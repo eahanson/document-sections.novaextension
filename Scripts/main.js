@@ -24,16 +24,16 @@ nova.commands.register("document-sections.go-to-section", (editor) => {
       goToLine(editor, sections[index])
     )
   }
-});
+})
 
 nova.commands.register("document-sections.go-to-previous-section", (editor) => {
-});
+})
 
 nova.commands.register("document-sections.go-to-next-section", (editor) => {
-  // const doc = editor.document;
-  // const sections = findSections(doc);
-  // console.log("selectedRange", editor.getLineRangeForRange(editor.selectedRange));
-});
+  // const doc = editor.document
+  // const sections = findSections(doc)
+  // console.log("selectedRange", editor.getLineRangeForRange(editor.selectedRange))
+})
 
 // // //
 
@@ -45,16 +45,16 @@ function findSections(doc) {
 
     let sections = []
     while(result = pattern.exec(text)) {
-      let start = pattern.lastIndex - result[0].length;
-      let end = pattern.lastIndex;
-      let name = trim(result[2]);
-      let line = calculateLine(text, start + 1);
-      sections.push({start: start, end: end, name: name, line: line});
-    };
+      let start = pattern.lastIndex - result[0].length
+      let end = pattern.lastIndex
+      let name = trim(result[2])
+      let line = calculateLine(text, start + 1) + 1
+      sections.push({start: start, end: end, name: name, line: line})
+    }
 
-    return sections;
+    return sections
   } else {
-    return [];
+    return []
   }
 }
 
