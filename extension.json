@@ -23,6 +23,13 @@
       }
     ]
   },
+  "config": [{
+    "default": ["# # #", "// // //"],
+    "description": "If a line starts with one of these prefixes, it will be considered a section. Whitespace at the beginning of the line is ignored. Text after the prefix will be considered the name of the section. Example: \"// // //\"",
+    "key": "document-sections.patterns",
+    "title": "Section prefixes",
+    "type": "stringArray"
+  }],
   "description": "Navigate between user-defined sections of a document.",
   "entitlements": {},
   "homepage": "https://github.com/eahanson/document-sections.novaextension",

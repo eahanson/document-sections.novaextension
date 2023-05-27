@@ -57,7 +57,7 @@ function findSections(document) {
   const text = documentText(document)
 
   if (isNonEmptyString(text)) {
-    const pattern = buildRegex()
+    const pattern = buildRegex(nova.config.get("document-sections.patterns"))
 
     let sections = []
     while (result = pattern.exec(text)) {

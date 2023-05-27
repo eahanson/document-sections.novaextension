@@ -1,0 +1,16 @@
+A test file that has some sections.
+
+# # #
+Unnamed section
+
+
+# # # Named section at line 7
+It has a name
+
+
+  # # # Named section at line 11
+  It has a name too, and it's indented
+
+
+-- -- -- SQL-style at line 15
+You need to add this style to the settings for it to work.
