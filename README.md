@@ -5,7 +5,7 @@ of a document, or to go to the previous or next section.
 A section is defined by a line of text that starts with a section indicator, optionally followed by some text
 terminated by a newline.
 
-![screenshot](document-sections.png)
+![screenshot](https://raw.github.com/eahanson/document-sections.novaextension/main/document-sections.png)
 
 ## Usage
 
