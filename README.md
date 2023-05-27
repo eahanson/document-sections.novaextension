@@ -5,6 +5,8 @@ of a document, or to go to the previous or next section.
 A section is defined by a line of text that starts with a section indicator, optionally followed by some text
 terminated by a newline.
 
+![screenshot](document-sections@2x.png)
+
 ## Usage
 
 To run Document Sections:
