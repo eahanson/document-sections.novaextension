@@ -51,4 +51,4 @@ To run Document Sections:
 
 ## License, Copyright, Attributions
 
-Copyright 2023 Erik Hanson. See [LICENSE](https://github.com/eahanson/open-recent.novaextension/blob/main/LICENSE).
+Copyright 2023 Erik Hanson. See [LICENSE](https://github.com/eahanson/document-sections.novaextension/blob/main/LICENSE).
