@@ -16,7 +16,7 @@ To run Document Sections:
 - Select the **Editor → Document Sections → Go to Next Section** menu item; or
 - Open the command palette and type `Go to Section…`
 
-## Nova extensions I’ve written
+## Other Nova extensions you might like :)
 
 - **Document Sections** lets you jump around to various sections in a text document using a customizable marker
   (typically a code comment in a certain format).
